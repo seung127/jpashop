@@ -43,4 +43,10 @@ public class MemberService {
     public Member findOne(Long memberId){
         return memberRepository.findOne(memberId);
     }
+
+    @Transactional //MemberApiController 수정 관련
+    public void update(Long id,String name){
+        Member member = memberRepository.findOne(id);
+        member.setName(name); //commit되는 시점에 update쿼리
+    }
 }

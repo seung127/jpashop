@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor //entitymanager도 이 에노테이션 사용 가능
 public class MemberRepository {
 
-    // @PersistenceContext jpa 만들어주는 에노테이션 | 알아서 주입해주는
+    // @PersistenceContext : jpa 만들어주는 에노테이션 | 알아서 주입해주는
     private final EntityManager em;
 
 
