@@ -113,20 +113,37 @@ public class OrderRepository {
 
     }
 
-    public List<OrderSimpleQueryDto> findOrderDtos() { //직접 쿼리를 만들었으므로 v3보다 더 효율적
+
+    public List<OrderSimpleQueryDto> findOrderDtos() {
         return em.createQuery(
                         "select new jpabook.jpashop.repository.OrderSimpleQueryDto(o.id, m.name, o.orderDate, o.status, d.address)" +
-                        " from Order o" + " join o.member m" + " join o.delivery d", OrderSimpleQueryDto.class).getResultList();
+                                " from Order o" + " join o.member m" + " join o.delivery d", OrderSimpleQueryDto.class).getResultList();
     }
 
-    /**
-     * 쿼리 방식 선택 권장 순서
-     * 1. 우선 엔티티를 DTO로 변환하는 방법을 선택한다.
-     * 2. 필요하면 페치 조인으로 성능을 최적화 한다. 대부분의 성능 이슈가 해결된다.
-     * 3. 그래도 안되면 DTO로 직접 조회하는 방법을 사용한다.
-     * 4. 최후의 방법은 JPA가 제공하는 네이티브 SQL이나 스프링 JDBC Template을 사용해서 SQL을 직접
-     * 사용한다.
-     */
+
+
+    public List<Order> findAllWithItem() {
+        //distinct가 있다면 알아서 중복제거 (distinct의 역할 1.db에 distinct /2.중복인 경우 걸러서 담아준다
+        return em.createQuery(
+                        "select distinct o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d" +
+                                " join fetch o.orderItems oi" +
+                                " join fetch oi.item i", Order.class)
+                .getResultList();
+
+    }
+
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 
 }
 

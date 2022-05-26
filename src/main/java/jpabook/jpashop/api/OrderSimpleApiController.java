@@ -29,15 +29,14 @@ public class OrderSimpleApiController {
     private final OrderRepository orderRepository;
 
 
-    /**
-     *   양방향이 걸리는 곳은 @jsonignore을 처리해주어야한다지연로딩이므로 db에서 안가지고 온다. 프로시를 만들어서 가지고 있는 것
+    /**양방향이 걸리는 곳은 @jsonignore을 처리해주어야한다지연로딩이므로 db에서 안가지고 온다. 프로시를 만들어서 가지고 있는 것*/
 
     @GetMapping("/api/v1/simple-orders")
         public List<Order> ordersV1(){
         List<Order> all = orderRepository.findAllByString(new OrderSearch());
         return all;
     }
-     */
+
 
     //---------------------------------------------------------------------------------------
 
@@ -99,8 +98,8 @@ public class OrderSimpleApiController {
     @GetMapping("/api/v4/simple-orders")
     public List<OrderSimpleQueryDto> ordersV4() {
         return orderRepository.findOrderDtos();
-
     }
+
 
  }
 
